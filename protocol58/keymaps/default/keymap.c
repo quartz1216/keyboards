@@ -1,7 +1,8 @@
 #include QMK_KEYBOARD_H
 
 enum {
-  RUN
+  RUN,
+  LANG
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -15,7 +16,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* |-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|*/
     KC_LSFT,    KC_Z,       KC_X,       KC_C,       KC_V,       KC_B,       KC_N,       KC_M,       KC_COMM,    KC_DOT,     KC_SCLN,    KC_QUOT,    \
 /* |-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|*/
-    KC_LCTL,    LGUI_T(RUN),KC_LALT,    MO(1),      KC_SPC,     A(KC_GRV),  KC_LBRC,    KC_RBRC,    KC_EQL,    KC_GRV,      KC_BSLS,    KC_SLSH     \
+    KC_LCTL,    LGUI_T(RUN),KC_LALT,    MO(1),      KC_SPC,     TD(LANG),   KC_LBRC,    KC_RBRC,    KC_EQL,    KC_GRV,      KC_BSLS,    KC_SLSH     \
 /* |-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|*/   
   ), 
   [1] = LAYOUT_12x5(
@@ -45,3 +46,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     return true;
 }
+
+tap_dance_action_t tap_dance_actions[]=(
+    [LANG] = ACTION_TAP_DANCE_DOUBLE(A(KC_GRV),G(KC_SPC))
+);
