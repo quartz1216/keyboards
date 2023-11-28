@@ -10,3 +10,4 @@
 
 #define DIODE_DIRECTION ROW2COL
 #define MIDI_BASIC
+

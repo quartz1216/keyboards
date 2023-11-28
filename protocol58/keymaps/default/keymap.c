@@ -2,7 +2,7 @@
 
 enum {
   RUN,
-  LANG
+  LANG,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -12,11 +12,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* |-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|*/
     KC_TAB,     KC_Q,       KC_W,       KC_E,       KC_R,       KC_T,       KC_Y,       KC_U,       KC_I,       KC_O,       KC_P,       KC_BSPC,    \
 /* |-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|*/
-    KC_ESC,     KC_A,       KC_S,       KC_D,       KC_F,       KC_G,       KC_H,       KC_J,       KC_K,       KC_L,       KC_MINS,    KC_ENT,     \
+  CTL_T(KC_ESC),KC_A,       KC_S,       KC_D,       KC_F,       KC_G,       KC_H,       KC_J,       KC_K,       KC_L,       KC_MINS,    KC_ENT,     \
 /* |-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|*/
     KC_LSFT,    KC_Z,       KC_X,       KC_C,       KC_V,       KC_B,       KC_N,       KC_M,       KC_COMM,    KC_DOT,     KC_SCLN,    KC_QUOT,    \
 /* |-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|*/
-    KC_LCTL,    LGUI_T(RUN),KC_LALT,    MO(1),      KC_SPC,     TD(LANG),   KC_LBRC,    KC_RBRC,    KC_EQL,    KC_GRV,      KC_BSLS,    KC_SLSH     \
+    KC_LCTL,    GUI_T(RUN), KC_LALT,    MO(1),      KC_SPC,     LT(0,LANG), KC_LBRC,    KC_RBRC,    KC_EQL,    KC_GRV,      KC_BSLS,    KC_SLSH     \
 /* |-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|*/   
   ), 
   [1] = LAYOUT_12x5(
@@ -25,7 +25,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* |-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|*/
     KC_PAUS,    KC_HOME,    KC_UP,      KC_END,     KC_PGUP,    A(KC_F4),   KC_1,       KC_2,       KC_3,       KC_4,       KC_5,       _______,     \
 /* |-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|*/
-    KC_MEH,     KC_LEFT,    KC_DOWN,    KC_RGHT,    KC_PGDN,    S(KC_F10),  KC_6,       KC_7,       KC_8,       KC_9,       KC_0,       _______,     \
+    KC_ESC,     KC_LEFT,    KC_DOWN,    KC_RGHT,    KC_PGDN,    S(KC_F10),  KC_6,       KC_7,       KC_8,       KC_9,       KC_0,       _______,     \
 /* |-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|*/
     _______,    KC_DEL,     KC_BSPC,    KC_ENT,     KC_APP,     _______,    KC_F1,      KC_F2,      KC_F3,      KC_F4,      KC_F5,      KC_F6,       \
 /* |-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|*/
@@ -39,14 +39,17 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case LGUI_T(RUN):
             if (record->tap.count && record->event.pressed) {
-                SEND_STRING(SS_LALT(SS_TAP(X_SPC)));
+                tap_code16(A(KC_SPC));
                 return false;
             }
             break;  
+        case LT(0,LANG):
+            if(record->tap.count && record -> event.pressed){
+                tap_code16(A(KC_GRV));
+            }else if(record->event.pressed){
+                tap_code16(G(KC_SPC));
+            }
+            return false;
     }
     return true;
 }
-
-tap_dance_action_t tap_dance_actions[]=(
-    [LANG] = ACTION_TAP_DANCE_DOUBLE(A(KC_GRV),G(KC_SPC))
-);
